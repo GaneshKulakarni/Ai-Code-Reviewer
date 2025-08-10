@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import "prismjs/themes/prism-tomorrow.css"
 import Editor from "react-simple-code-editor"
-import prism from "prismjs"
+import 'prismjs'
 import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-javascript';
 import 'prismjs/components/prism-python';
@@ -49,7 +49,7 @@ function App() {
             <Editor
               value={code}
               onValueChange={code => setCode(code)}
-              highlight={code => prism.highlight(code, prism.languages[language] || prism.languages.clike, language)}
+              highlight={code => window.Prism.highlight(code, window.Prism.languages[language] || window.Prism.languages.clike, language)}
               padding={10}
               style={{
                 fontFamily: '"Fira code", "Fira Mono", monospace',
