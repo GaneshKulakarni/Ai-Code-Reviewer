@@ -3,9 +3,12 @@ require('dotenv').config();
 
 
 const apiKey = process.env.GOOGLE_GEMINI_API;
-const genAI = new GoogleGenerativeAI(apiKey);
-console.log(process.env.GOOGLE_GEMINI_API);
 
+if (!apiKey) {
+    console.error("API_KEY is missing. Ensure it is set up in your .env file.");
+}
+
+const genAI = new GoogleGenerativeAI(apiKey);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash",
     systemInstruction :` 
 You are an expert software engineer and code reviewer with in-depth knowledge of programming languages, design principles, performance optimization, and secure coding practices.
@@ -71,10 +74,5 @@ async function generateContent(prompt) {
     const result = await model.generateContent(prompt);
     return result.response.text();
 }
-
-if (!apiKey) {
-    console.error("API_KEY is missing. Ensure it is set up in your .env file.");
-}
-
 
 module.exports = generateContent;

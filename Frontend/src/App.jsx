@@ -1,8 +1,12 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import "prismjs/themes/prism-tomorrow.css"
-// import "prismjs/components/prism-javascript"
 import Editor from "react-simple-code-editor"
 import prism from "prismjs"
+import 'prismjs/components/prism-clike';
+import 'prismjs/components/prism-javascript';
+import 'prismjs/components/prism-python';
+import 'prismjs/components/prism-java';
+import 'prismjs/components/prism-cpp';
 import Markdown from "react-markdown"
 import rehypeHighlight from "rehype-highlight";
 import "highlight.js/styles/github-dark.css";
@@ -15,14 +19,11 @@ function App() {
 }`)
 
   const [review, setReview] = useState(``)
-
-  useEffect(() => {
-    prism.highlightAll()
-  }, [code])
+  const [language, setLanguage] = useState('javascript');
 
   async function reviewCode() {
     try {
-     const response = await axios.post('http://localhost:3000/ai/get-review', { code });
+     const response = await axios.post('/ai/get-review', { code });
       
       setReview(response.data);
     } catch (error) {
@@ -35,11 +36,20 @@ function App() {
     <>
       <main>
         <div className="left">
+          <div className="language-selector">
+            <label htmlFor="language">Language: </label>
+            <select id="language" value={language} onChange={e => setLanguage(e.target.value)}>
+              <option value="javascript">JavaScript</option>
+              <option value="python">Python</option>
+              <option value="java">Java</option>
+              <option value="cpp">C++</option>
+            </select>
+          </div>
           <div className="code">
             <Editor
               value={code}
               onValueChange={code => setCode(code)}
-              highlight={code => prism.highlight(code, prism.languages.javascript, "javascript")}
+              highlight={code => prism.highlight(code, prism.languages[language] || prism.languages.clike, language)}
               padding={10}
               style={{
                 fontFamily: '"Fira code", "Fira Mono", monospace',
