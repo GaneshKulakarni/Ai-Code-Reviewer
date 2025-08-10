@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import "prismjs/themes/prism-tomorrow.css"
 // import "prismjs/components/prism-javascript"
 import Editor from "react-simple-code-editor"
@@ -16,13 +16,9 @@ function App() {
 
   const [review, setReview] = useState(``)
 
-  useEffect(() => {
-    prism.highlightAll()
-  }, [code])
-
   async function reviewCode() {
     try {
-     const response = await axios.post('http://localhost:3000/ai/get-review', { code });
+     const response = await axios.post('/ai/get-review', { code });
       
       setReview(response.data);
     } catch (error) {
